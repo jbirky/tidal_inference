@@ -24,14 +24,14 @@ os.nice(10)
 # Configure vplanet forward model
 # ========================================================
 
-inpath = os.path.join(vpi.INFILE_DIR, "stellar_eqtide/ctl")
+inpath = os.path.join(vpi.INFILE_DIR, "stellar_eqtide/cpl")
 
 inparams = {"primary.dMass": u.Msun, 
             "secondary.dMass": u.Msun, 
             "primary.dRotPeriod": u.day, 
             "secondary.dRotPeriod": u.day, 
-            "primary.dTidalTau": u.dex(u.s), 
-            "secondary.dTidalTau": u.dex(u.s), 
+            "primary.dTidalQ": u.dex(u.dimensionless_unscaled), 
+            "secondary.dTidalQ": u.dex(u.dimensionless_unscaled), 
             "primary.dObliquity": u.deg, 
             "secondary.dObliquity": u.deg, 
             "secondary.dEcc": u.dimensionless_unscaled, 
@@ -47,16 +47,16 @@ vpm = vpi.VplanetModel(inparams, inpath=inpath, outparams=outparams,
                        outpath="results/1param_stellar_evolution/",
                        verbose=True, timesteps=1e5*u.yr)
 
-tvals = np.round(np.arange(-4, 2, .1),1)
-sdir = [str(tv) for tv in tvals]
+qvals = np.round(np.arange(4, 9, .2),1)
+sdir = [str(tv) for tv in qvals]
 
-def run_evol_tau(tau_ind):
-    tau = tvals[tau_ind]
-    tt = np.array([1.0, 1.0, 0.5, 0.5, tau, tau, 0.0, 0.0, 0.15, 7.0, 10])
-    output = vpm.run_model(tt, remove=False, outsubpath=sdir[tau_ind])
+def run_evol_q(q_ind):
+    q = qvals[q_ind]
+    tt = np.array([1.0, 1.0, 0.5, 0.5, q, q, 0.0, 0.0, 0.15, 7.0, 10])
+    output = vpm.run_model(tt, remove=False, outsubpath=sdir[q_ind])
     
-with mp.Pool(len(tvals)) as p:
-    p.map(run_evol_tau, range(len(tvals)))
+with mp.Pool(len(qvals)) as p:
+    p.map(run_evol_q, range(len(qvals)))
 
 
 # ========================================================
@@ -65,10 +65,10 @@ with mp.Pool(len(tvals)) as p:
 
 savedir = "results/1param_stellar_evolution"
 
-tvals = np.round(np.arange(-4, 2, .2),1)
-results = [str(tv) for tv in tvals]
+qvals = np.round(np.arange(4, 9, .2),1)
+results = [str(tv) for tv in qvals]
 
-c = np.arange(0, len(tvals))
+c = np.arange(0, len(qvals))
 
 norm = mpl.colors.Normalize(vmin=c.min(), vmax=c.max())
 cmap = mpl.cm.ScalarMappable(norm=norm, cmap=mpl.cm.jet)
@@ -76,7 +76,7 @@ cmap.set_array([])
 
 fig, axs = plt.subplots(1, 3, figsize=[30,16], sharex=True)
 
-for ii in range(len(tvals)):
+for ii in range(len(qvals)):
     keys = ['time', 'rad', 'lum', 'prot', 'porb', 'ecc', 'none']
     pri = pd.read_csv(f'{savedir}/{results[ii]}/system.primary.forward', sep=' ', names=keys)[1:]
     sec = pd.read_csv(f'{savedir}/{results[ii]}/system.secondary.forward', sep=' ', names=keys)[1:]
@@ -93,11 +93,11 @@ for ii in range(len(tvals)):
 #     axs[0].legend(loc='best', fontsize=16)
     axs[2].set_ylabel("Eccentricity", fontsize=20)
 
-fig.colorbar(cmap, ticks=c).ax.set_yticklabels(tvals)
+fig.colorbar(cmap, ticks=c).ax.set_yticklabels(qvals)
 plt.xscale('log')
 plt.xlim(min(sec['time']), max(sec['time']))
 axs[0].minorticks_on()
 axs[1].minorticks_on()
 plt.tight_layout()
-plt.savefig("plots/vary_tau_evolution.png")
+plt.savefig("plots/vary_q_evolution.png")
 plt.show()
