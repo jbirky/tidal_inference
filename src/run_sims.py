@@ -178,7 +178,7 @@ def plot_likelihood_1param(true_tides=None,
             plt.plot(theta, np.log10(-y), linewidth=1.2, color=colors[ii], label=pl_label)
             plt.axvline(x=true_tides[ii], linestyle='--', color='k', linewidth=1)
 
-        plt.xlabel(tide_label + r"$[\log(s)]$", fontsize=22)
+        plt.xlabel(tide_label, fontsize=22)
         plt.ylabel(r"$\log(-\log\mathcal{L})$", fontsize=22)
         plt.legend(loc='best', fontsize=18)
         plt.xlim(min(theta), max(theta))
@@ -216,7 +216,7 @@ def run_evolution_vary_tides():
 # =====================================================================================
 
 def plot_evolution_vary_tides():
-    
+
     savedir = "results/1param_evolution"
 
     qvals = np.round(np.arange(4, 9, .2),1)
