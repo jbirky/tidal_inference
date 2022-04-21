@@ -1,6 +1,3 @@
-import alabi
-from alabi import SurrogateModel
-from alabi import utility as ut
 import vplanet_inference as vpi
 import numpy as np
 import scipy
