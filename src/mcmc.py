@@ -7,6 +7,7 @@ import numpy as np
 from functools import partial
 import multiprocessing as mp
 import os
+import copy
 import yaml
 from yaml.loader import SafeLoader
 from collections import OrderedDict
@@ -16,114 +17,87 @@ import vplanet_inference as vpi
 from alabi import utility as ut
 
 
-__all__ = ["load_config",
-           "lnlike_base",
-           "configure_model",
-           "run_dynesty_save"]
+__all__ = ["SyntheticModel"]
 
 
-def load_config(cfile):
+class SyntheticModel(object):
     
-    with open(cfile) as f:
-        data = yaml.load(f, Loader=SafeLoader)
-        
-    bounds = []
-    prior_data = []
-    theta_true = []
-    labels = []
-    inparams = OrderedDict()
-    for key in data['input'].keys():
-        bounds.append(eval(data['input'][key]['prior_bounds']))
-        prior_data.append(eval(data['input'][key]['prior_data']))
-        theta_true.append(float(data['input'][key]['true_value']))
-        labels.append(str(data['input'][key]['label']))
-        inparams[key] = eval(data['input'][key]['units'])
-        
-    output_unc = []
-    outparams = OrderedDict()
-    for key in data['output'].keys():
-        output_unc.append(float(data['output'][key]['uncertainty']))
-        outparams[key] = eval(data['output'][key]['units'])
-        
-    return data, inparams, bounds, prior_data, theta_true, outparams, output_unc, labels
-
-
-def lnlike_base(theta, vpm=None, like_data=None, inparams=None, fix_tide=True):
+    def __init__(self, cfile, fix_tide=True):
     
-    if fix_tide == True:
-        pri_tide_ind = np.where(np.array(list(inparams.keys())) == 'primary.dTidalTau')[0]
-        sec_tide_ind = np.where(np.array(list(inparams.keys())) == 'secondary.dTidalTau')[0]
-        theta[sec_tide_ind] = theta[pri_tide_ind]
-        
-    output = vpm.run_model(theta)
-    
-    lnlike = -0.5 * np.sum(((output - like_data.T[0])/like_data.T[1])**2)
+        # load YAML config file
+        with open(cfile) as f:
+            data = yaml.load(f, Loader=SafeLoader)
 
-    return lnlike
-    
-        
-def configure_model(cfile, fix_tide=True):
-    
-    data, inparams, bounds, prior_data, theta_true, outparams, output_unc, labels = load_config(cfile)
-    
-    inpath = os.path.join(vpi.INFILE_DIR, data['module'], data['tide_model'])
-    vpm = vpi.VplanetModel(inparams, inpath=inpath, outparams=outparams)
-    
-    output_true = vpm.run_model(theta_true)
-    like_data = np.vstack([output_true, output_unc]).T
-    
-    lnlike = partial(lnlike_base, vpm=vpm, like_data=like_data, inparams=inparams, fix_tide=fix_tide)
-    
-    ptform = partial(ut.prior_transform_normal, bounds=bounds, data=prior_data)
-    
-    return lnlike, ptform, labels, bounds
+        # format fixed input parameters
+        self.inparams_fix = OrderedDict()
+        self.theta_true = OrderedDict()
+
+        for key in data['input_fix'].keys():
+            self.inparams_fix[key] = eval(data['input_fix'][key]['units'])
+            self.theta_true[key] = float(data['input_fix'][key]['true_value'])
+
+        # format variable input parameters
+        self.inparams_var = OrderedDict()
+        self.bounds = []
+        self.prior_data = []
+        self.labels = []
+
+        for key in data['input_var'].keys():
+            self.inparams_var[key] = eval(data['input_var'][key]['units'])
+            self.theta_true[key] = float(data['input_var'][key]['true_value'])
+
+            self.labels.append(str(data['input_var'][key]['label']))
+            self.bounds.append(eval(data['input_var'][key]['prior_bounds']))
+            self.prior_data.append(eval(data['input_var'][key]['prior_data']))
+
+        # format output parameters
+        self.outparams = OrderedDict()
+        self.output_unc = []
+
+        for key in data['output'].keys():
+            self.output_unc.append(float(data['output'][key]['uncertainty']))
+            self.outparams[key] = eval(data['output'][key]['units'])
+
+        self.fix_tide = fix_tide
+
+        # load config file
+        self.inparams_all = {**self.inparams_fix, **self.inparams_var}
+
+        # initialize vplanet model
+        inpath = os.path.join(vpi.INFILE_DIR, data['module'], data['tide_model'])
+        self.vpm = vpi.VplanetModel(self.inparams_all, inpath=inpath, outparams=self.outparams)
+
+        # run vplanet model on true parameters
+        self.output_true = self.vpm.run_model(np.array(list(self.theta_true.values())))
+        self.like_data = np.vstack([self.output_true, self.output_unc]).T
+
+        # set up prior for dynesty
+        self.ptform = partial(ut.prior_transform_normal, bounds=self.bounds, data=self.prior_data)
 
 
-def run_dynesty_save(lnlike, ptform, ndim, save_iter=100, savedir="results"):
+    def format_theta(self, theta_var):
 
-    ncore = mp.cpu_count()
-    pool = mp.Pool(ncore)
-    pool.size = ncore
+        theta_run = copy.copy(self.theta_true)
+        theta_var = dict(zip(list(self.inparams_var.keys()), theta_var))
 
-    # Initialize nested sampler
-    dsampler = NestedSampler(lnlike, ptform, ndim, pool=pool)
+        for key in self.inparams_var.keys():
+            theta_run[key] = theta_var[key]
 
-    
-    if not os.path.exists(savedir):
-        os.makedirs(savedir)
+        if self.fix_tide == True:
+            theta_run['secondary.dTidalTau'] = theta_run['primary.dTidalTau']
 
-    run_sampler = True
-    last_iter = 0
-    while run_sampler == True:
-        dsampler.run_nested(maxiter=save_iter)
+        return np.array(list(theta_run.values()))
 
-        file = os.path.join(savedir, "dynesty_sampler.pkl")
 
-        # pickle dynesty sampler object
-        with open(file, "wb") as f:        
-            pickle.dump(dsampler, f)
+    def lnlike(self, theta_var):
 
-        res = dsampler.results
-        samples = res.samples  
-        weights = np.exp(res.logwt - res.logz[-1])
+        # format fixed theta + variable theta
+        theta_run = self.format_theta(theta_var)
 
-        # Resample weighted samples.
-        dynesty_samples = dyfunc.resample_equal(samples, weights)
+        # run model
+        output = self.vpm.run_model(theta_run)
 
-        np.savez(savedir+"/dynesty_samples.npz", samples=dynesty_samples)
+        # compute log likelihood
+        lnl = -0.5 * np.sum(((output - self.like_data.T[0])/self.like_data.T[1])**2)
 
-        # check if converged (i.e. hasn't run for more iterations)
-        if dsampler.results.niter > last_iter:
-            last_iter = dsampler.results.niter
-            run_sampler = True
-        else:
-            run_sampler = False
-
-    res = dsampler.results
-    samples = res.samples  
-    weights = np.exp(res.logwt - res.logz[-1])
-
-    # Resample weighted samples.
-    dynesty_samples = dyfunc.resample_equal(samples, weights)
-
-    np.savez(savedir+"/dynesty_samples_final.npz", samples=dynesty_samples)
+        return lnl
