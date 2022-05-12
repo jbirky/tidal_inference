@@ -8,24 +8,25 @@ module_id [0-9]
 3 = cpl_stellar_eqtide
 
 [tide_id] [000-999]
-020 = -2
-010 = -1
-100 = 0
-110 = 1
-120 = 2
+n020 = -2
+n010 = -1
+p000 = 0
+p010 = 1
+p020 = 2
 
-040 = 4
-050 = 5
-060 = 6
-070 = 7
-080 = 8
-090 = 9
-100 = 10
+p040 = 4
+p050 = 5
+p060 = 6
+p070 = 7
+p080 = 8
+p090 = 9
+p100 = 10
 
 param_id [00-99]
 00 = tau
 01 = tau, porb, ecc
 02 = tau, porb, ecc, prot1, prot2
+03 = tau, porb, ecc, prot1, prot2, mass1, mass2, age
 
 age_id [00-99]
 16 = 1e6

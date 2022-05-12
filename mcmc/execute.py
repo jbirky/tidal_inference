@@ -14,7 +14,7 @@ args = parser.parse_args()
 # # Parse config.yaml file
 # lnlike, ptform, labels, bounds = mcmc.configure_model(args.file)
 
-synth = mcmc.SyntheticModel(args.file)
+synth = mcmc.SyntheticModel(args.file, verbose=False)
 
 # base_dir = os.path.dirname(os.path.realpath(args.file))
 config_name = args.file.split("/")[-1].split(".yaml")[0].strip("/")
