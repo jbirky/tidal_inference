@@ -46,7 +46,7 @@ class SyntheticModel(object):
             self.inparams_var[key] = eval(data['input_var'][key]['units'])
             self.theta_true[key] = float(data['input_var'][key]['true_value'])
 
-            self.labels.append(str(data['input_var'][key]['label']))
+            self.labels.append(eval(data['input_var'][key]['label']))
             self.bounds.append(eval(data['input_var'][key]['prior_bounds']))
             self.prior_data.append(eval(data['input_var'][key]['prior_data']))
 

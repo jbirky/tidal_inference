@@ -1,0 +1,40 @@
+
+[module_id]_[tau_id]_[param_id]_[age_id]_[mcmc_id]_[trial_id]
+
+module_id [0-9]
+0 = ctl_eqtide
+1 = cpl_eqtide
+2 = ctl_stellar_eqtide
+3 = cpl_stellar_eqtide
+
+[tide_id] [000-999]
+020 = -2
+010 = -1
+100 = 0
+110 = 1
+120 = 2
+
+040 = 4
+050 = 5
+060 = 6
+070 = 7
+080 = 8
+090 = 9
+100 = 10
+
+param_id [00-99]
+00 = tau
+01 = tau, porb, ecc
+02 = tau, porb, ecc, prot1, prot2
+
+age_id [00-99]
+16 = 1e6
+56 = 5e6
+17 = 1e7
+57 = 5e7
+18 = 1e8
+58 = 5e8
+19 = 1e9
+59 = 5e9
+
+trial_id [00-99]
