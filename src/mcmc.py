@@ -22,7 +22,7 @@ __all__ = ["SyntheticModel"]
 
 class SyntheticModel(object):
     
-    def __init__(self, cfile, fix_tide=True):
+    def __init__(self, cfile, fix_tide=True, verbose=True):
     
         # load YAML config file
         with open(cfile) as f:
@@ -65,7 +65,7 @@ class SyntheticModel(object):
 
         # initialize vplanet model
         inpath = os.path.join(vpi.INFILE_DIR, data['module'], data['tide_model'])
-        self.vpm = vpi.VplanetModel(self.inparams_all, inpath=inpath, outparams=self.outparams)
+        self.vpm = vpi.VplanetModel(self.inparams_all, inpath=inpath, outparams=self.outparams, verbose=verbose)
 
         # run vplanet model on true parameters
         self.output_true = self.vpm.run_model(np.array(list(self.theta_true.values())))
