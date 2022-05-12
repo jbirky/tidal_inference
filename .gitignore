@@ -16,3 +16,5 @@
 *.csv
 *.vot
 *.fits
+*.out
+core*
