@@ -11,9 +11,6 @@
 *.bbl
 *.blg
 *.pdf
-*.npy
-*.txt
-*.csv
 *.vot
 *.fits
 *.out
