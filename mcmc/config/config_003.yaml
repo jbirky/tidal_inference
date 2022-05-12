@@ -21,6 +21,10 @@ input_fix:
     units: "u.deg"
     true_value: 0
     label: r"\rm $\varepsilon_2 [\deg]$"
+  "secondary.dTidalTau":
+    units: "u.dex(u.s)"
+    true_value: -2.0
+    label: r"$\rm \log\tau_2$ [dex(s)]"
 input_var:
   "primary.dRotPeriod":
     units: "u.day"
@@ -52,12 +56,6 @@ input_var:
     prior_bounds: (-4.0, 1.0)
     prior_data: (None, None)
     label: r"$\rm \log\tau_1$ [dex(s)]"
-  "secondary.dTidalTau":
-    units: "u.dex(u.s)"
-    true_value: -2.0
-    prior_bounds: (-4.0, 1.0)
-    prior_data: (None, None)
-    label: r"$\rm \log\tau_2$ [dex(s)]"
 output:
   "final.primary.RotPer":
     units: "u.day"

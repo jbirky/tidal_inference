@@ -37,6 +37,10 @@ input_fix:
     units: "u.day"
     true_value: 7.0
     label: r"$\rm P_{orb} [d]$"
+  "secondary.dTidalTau":
+    units: "u.dex(u.s)"
+    true_value: -2.0
+    label: r"$\rm \log\tau_2$ [dex(s)]"
 input_var:
   "primary.dTidalTau":
     units: "u.dex(u.s)"
@@ -44,12 +48,6 @@ input_var:
     prior_bounds: (-4.0, 1.0)
     prior_data: (None, None)
     label: r"$\rm \log\tau_1$ [dex(s)]"
-  "secondary.dTidalTau":
-    units: "u.dex(u.s)"
-    true_value: -2.0
-    prior_bounds: (-4.0, 1.0)
-    prior_data: (None, None)
-    label: r"$\rm \log\tau_2$ [dex(s)]"
 output:
   "final.primary.RotPer":
     units: "u.day"
