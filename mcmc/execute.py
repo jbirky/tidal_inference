@@ -24,5 +24,5 @@ savedir = os.path.join("results/", config_name)
 sm = alabi.SurrogateModel(fn=synth.lnlike, bounds=synth.bounds, savedir=savedir, labels=synth.labels)
 
 if args.method == "dynesty":
-    sm.run_dynesty(like_fn="true", ptform=synth.ptform, mode="dynamic", multi_proc=True)
+    sm.run_dynesty(like_fn="true", ptform=synth.ptform, mode="dynamic", multi_proc=True, save_iter=100)
     # sm.plot(plots=["dynesty_all"])
