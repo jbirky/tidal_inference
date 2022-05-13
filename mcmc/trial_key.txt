@@ -39,3 +39,9 @@ age_id [00-99]
 59 = 5e9
 
 trial_id [00-99]
+
+N = not run
+Q = in queue
+C = cancelled
+I = incomplete
+X = complete
