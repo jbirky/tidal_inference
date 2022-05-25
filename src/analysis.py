@@ -81,7 +81,7 @@ class SyntheticModel(object):
         self.inparams_all = {**self.inparams_fix, **self.inparams_var}
 
         # initialize vplanet model
-        if 'inpath' is None:
+        if inpath is None:
             inpath = os.path.join(vpi.INFILE_DIR, data['module'], data['tide_model'])
         self.vpm = vpi.VplanetModel(self.inparams_all, inpath=inpath, outparams=self.outparams, verbose=verbose)
 
@@ -118,23 +118,18 @@ class SyntheticModel(object):
 
     def run_models(self, theta_var_array):
 
-        t0 = time.time()
-
-        if ncore <= 1:
+        if self.ncore <= 1:
             outputs = np.zeros(theta_var_array.shape[0])
             for ii, tt in tqdm.tqdm(enumerate(theta_var_array)):
                 outputs[ii] = self.run_model_format(tt)
         else:
-            with mp.Pool(ncore) as p:
+            with mp.Pool(self.ncore) as p:
                 # outputs = np.array(p.map(self.run_model_format, theta_var_array))
 
                 outputs = []
-                for result in tqdm(p.imap(func=self.run_model_format, iterable=theta_var_array), total=len(theta_var_array)):
+                for result in tqdm.tqdm(p.imap(func=self.run_model_format, iterable=theta_var_array), total=len(theta_var_array)):
                     outputs.append(result)
                 outputs = np.array(outputs)
-
-        tf = time.time()
-        print(f"Computed {len(theta)} function evaluations: {np.round(tf - t0)}s \n")
 
         return outputs
 
@@ -149,7 +144,7 @@ class SyntheticModel(object):
         return lnl
 
 
-    def run_mcmc(self, method="dynesty", reload=True, 
+    def run_mcmc(self, method="dynesty", reload=False, 
                        kernel="ExpSquaredKernel",
                        ntrain=1000, ntest=100, niter=500):
 
@@ -171,7 +166,7 @@ class SyntheticModel(object):
             prior_sampler = partial(alabi.utility.prior_sampler, bounds=self.bounds, sampler='uniform')
             sm = alabi.SurrogateModel(fn=self.lnlike, bounds=self.bounds, prior_sampler=prior_sampler,
                                     savedir=savedir, labels=self.labels)
-            sm.init_samples(ntrain=ntrain, ntest=test, reload=False)
+            sm.init_samples(ntrain=ntrain, ntest=ntest, reload=False)
             sm.init_gp(kernel=kernel, fit_amp=False, fit_mean=True, white_noise=-15)
 
         # Run MCMC
@@ -207,13 +202,13 @@ class SyntheticModel(object):
 
         np.savez(self.outpath + "var_global_sensitivity_sample.npz", param_values=param_values, Y=Y)
 
-        dict_s1 = {'input':synth.inparams_var.keys()}
-        dict_sT = {'input':synth.inparams_var.keys()}
+        dict_s1 = {'input':self.inparams_var.keys()}
+        dict_sT = {'input':self.inparams_var.keys()}
                         
         for ii in range(Y.shape[1]):
             res = sobol.analyze(problem, Y.T[ii])
-            dict_s1[list(synth.outparams.keys())[ii]] = res['S1']
-            dict_sT[list(synth.outparams.keys())[ii]] = res['ST']
+            dict_s1[list(self.outparams.keys())[ii]] = res['S1']
+            dict_sT[list(self.outparams.keys())[ii]] = res['ST']
             
         table_s1 = pd.DataFrame(data=dict_s1)
         table_s1 = table_s1.set_index("input").round(2)
@@ -227,13 +222,16 @@ class SyntheticModel(object):
         table_sT[table_sT.values > 1] = 1
         self.table_sT = table_sT
 
-        return table_s1, table_sT
 
+    def show_variance_table(self, table="s1"):
 
-    def show_variance_table(self, table):
+        if table == "s1":
+            df = self.table_s1
+        elif table == "sT":
+            df = self.table_sT
 
         fig = plt.figure(figsize=[12,8])
-        sn.heatmap(table, annot=True, annot_kws={"size": 18}) 
+        sn.heatmap(df, annot=True, annot_kws={"size": 22}) 
         plt.xticks(rotation=45)
         plt.show()
 
