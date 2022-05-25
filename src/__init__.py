@@ -1,2 +1,2 @@
 from .run_sims import *
-from .mcmc import *
+from .analysis import *
