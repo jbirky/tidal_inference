@@ -1,0 +1,47 @@
+
+[module_id]_[tau_id]_[param_id]_[age_id]_[mcmc_id]_[trial_id]
+
+module_id [0-9]
+0 = ctl_eqtide
+1 = cpl_eqtide
+2 = ctl_stellar_eqtide
+3 = cpl_stellar_eqtide
+
+[tide_id] [000-999]
+n020 = -2
+n010 = -1
+p000 = 0
+p010 = 1
+p020 = 2
+
+p040 = 4
+p050 = 5
+p060 = 6
+p070 = 7
+p080 = 8
+p090 = 9
+p100 = 10
+
+param_id [00-99]
+00 = tau
+01 = tau, porb, ecc
+02 = tau, porb, ecc, prot1, prot2
+03 = tau, porb, ecc, prot1, prot2, mass1, mass2, age
+
+age_id [00-99]
+16 = 1e6
+56 = 5e6
+17 = 1e7
+57 = 5e7
+18 = 1e8
+58 = 5e8
+19 = 1e9
+59 = 5e9
+
+trial_id [00-99]
+
+N = not run
+Q = in queue
+C = cancelled
+I = incomplete
+X = complete
