@@ -20,3 +20,6 @@ synth = analysis.SyntheticModel(args.file, verbose=False)
 
 if args.operation == "sensitivity":
     synth.variance_global_sensitivity()
+
+elif args.operation == "mcmc":
+    synth.run_mcmc(method=args.method, reload=args.reload, niter=args.niter)
