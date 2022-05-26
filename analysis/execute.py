@@ -2,7 +2,7 @@ import argparse
 from functools import partial
 import os
 import sys
-sys.path.append("../src/")
+sys.path.append(os.path.realpath("../src"))
 import analysis
 
 
@@ -16,7 +16,7 @@ parser.add_argument("--niter", type=int, default=500)
 args = parser.parse_args()
 
 # Parse config.yaml file
-synth = analysis.SyntheticModel(args.file, verbose=False)
+synth = analysis.SyntheticModel(args.file, verbose=True)
 
 if args.operation == "sensitivity":
     synth.variance_global_sensitivity()
