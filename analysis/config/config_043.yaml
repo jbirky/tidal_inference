@@ -1,37 +1,39 @@
-module: "eqtide"
+module: "stellar_eqtide"
 tide_model: "ctl"
 input_fix:
-  "primary.dObliquity":
-    units: "u.deg"
-    true_value: 0
-    label: r"\rm $\varepsilon_1 [\deg]$"
-  "secondary.dObliquity":
-    units: "u.deg"
-    true_value: 0
-    label: r"\rm $\varepsilon_2 [\deg]$"
+  "vpl.dStopTime":
+    units: "u.Myr"
+    true_value: 5000
+    label: r"age [Gyr]"
   "secondary.dTidalTau":
     units: "u.dex(u.s)"
     true_value: -1.0
     label: r"$\rm \log\tau_2$ [dex(s)]"
 input_var:
-  "vpl.dStopTime":
-    units: "u.Myr"
-    true_value: 100
-    prior_bounds: (5, 20)
-    prior_data: (100, 10)
-    label: r"age [Gyr]"
   "primary.dMass":
     units: "u.Msun"
     true_value: 1.0
-    prior_bounds: (0.9, 1.1)
-    prior_data: (1.0, 0.001)
+    prior_bounds: (0.6, 1.1)
+    prior_data: (None, None)
     label: r"$\rm M_1 [M_{\odot}]$"
   "secondary.dMass":
     units: "u.Msun"
     true_value: 1.0
-    prior_bounds: (0.9, 1.1)
-    prior_data: (1.0, 0.001)
+    prior_bounds: (0.6, 1.1)
+    prior_data: (None, None)
     label: r"$\rm M_2 [M_{\odot}]$"
+  "primary.dObliquity":
+    units: "u.deg"
+    true_value: 0
+    prior_bounds: (0, 30)
+    prior_data: (None, None)
+    label: r"\rm $\varepsilon_1 [\deg]$"
+  "secondary.dObliquity":
+    units: "u.deg"
+    true_value: 0
+    prior_bounds: (0, 30)
+    prior_data: (None, None)
+    label: r"\rm $\varepsilon_2 [\deg]$"
   "primary.dRotPeriod":
     units: "u.day"
     true_value: 0.5
@@ -75,3 +77,21 @@ output:
   "final.secondary.Eccentricity":
     units: "u.dimensionless_unscaled"
     uncertainty: 0.1
+  "final.primary.Radius":
+    units: "u.Rsun"
+    uncertainty: 0.01
+  "final.secondary.Radius":
+    units: "u.Rsun"
+    uncertainty: 0.01
+  "final.primary.Luminosity":
+    units: "u.Lsun"
+    uncertainty: 0.01
+  "final.secondary.Luminosity":
+    units: "u.Lsun"
+    uncertainty: 0.01
+  "final.primary.Temperature":
+    units: "u.K"
+    uncertainty: 50.0
+  "final.secondary.Temperature":
+    units: "u.K"
+    uncertainty: 50.0
