@@ -1,0 +1,73 @@
+module: "eqtide"
+tide_model: "ctl"
+input_fix:
+  "vpl.dStopTime":
+    units: "u.Myr"
+    true_value: 10
+    label: r"age [Gyr]"
+  "secondary.dOrbPeriod":
+    units: "u.day"
+    true_value: 7.0
+    label: r"$\rm P_{orb} [d]$"
+  "secondary.dTidalTau":
+    units: "u.dex(u.s)"
+    true_value: -1.0
+    label: r"$\rm \log\tau_2$ [dex(s)]"
+  "primary.dRadius":
+    units: "u.Rsun"
+    true_value: 1.0
+    label: r"$\rm R_1 \,[R_{\odot}]$"
+  "secondary.dRadius":
+    units: "u.Rsun"
+    true_value: 1.0
+    label: r"$\rm R_2 \,[R_{\odot}]$"
+input_var:
+  "primary.dMass":
+    units: "u.Msun"
+    true_value: 1.0
+    bounds: (0.1, 1.1)
+    data: (None, None)
+    label: r"$\rm M_1 \,[M_{\odot}]$"
+  "secondary.dMass":
+    units: "u.Msun"
+    true_value: 1.0
+    bounds: (0.1, 1.1)
+    data: (None, None)
+    label: r"$\rm M_2 \,[M_{\odot}]$"
+  "primary.dRotPeriod":
+    units: "u.day"
+    true_value: 0.5
+    bounds: (0.1, 6.0)
+    data: (None, None)
+    label: r"$\rm P_{rot1}$ [d]"
+  "secondary.dRotPeriod":
+    units: "u.day"
+    true_value: 0.5
+    bounds: (0.1, 6.0)
+    data: (None, None)
+    label: r"$\rm P_{rot2}$ [d]"
+  "secondary.dEcc": 
+    units: "u.dimensionless_unscaled"
+    true_value: 0.3
+    bounds: (0.0, 0.5)
+    data: (None, None)
+    label: r"$e$"
+  "primary.dTidalTau":
+    units: "u.dex(u.s)"
+    true_value: -1.0
+    bounds: (-4.0, 1.0)
+    data: (None, None)
+    label: r"$\rm \log\tau_1$ [dex(s)]"
+output:
+  "final.primary.RotPer":
+    units: "u.day"
+  "final.secondary.RotPer":
+    units: "u.day"
+  "final.secondary.OrbPeriod":
+    units: "u.day"
+  "final.secondary.Eccentricity":
+    units: "u.dimensionless_unscaled"
+  "final.primary.RotAngMom":
+    units: "u.kg * u.m**2 / u.s"
+  "final.secondary.OrbAngMom":
+    units: "u.kg * u.m**2 / u.s"
