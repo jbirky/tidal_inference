@@ -46,12 +46,12 @@ def get_tables_sorted(config_id_list):
     return tsort, synth.inparams_var.labels
 
 
-def plot_tables_sorted(tsort, labels, model="", save=False, show=True):
+def plot_tables_sorted(tsort, labels, model="", save=False, show=True, cmap="bone"):
     
     for key in tsort.keys():
         df = pd.DataFrame(data=tsort[key])
         
-        sn.heatmap(df, yticklabels=labels, annot=True, annot_kws={"size": 16}, vmin=0, vmax=1, cmap="bone")
+        sn.heatmap(df, yticklabels=labels, annot=True, annot_kws={"size": 16}, vmin=0, vmax=1, cmap=cmap)
         plt.title(key + " variance fraction", fontsize=22)
         plt.yticks(rotation=0)
         plt.xlabel("Age [Myr]", fontsize=22)
@@ -67,12 +67,16 @@ ctl = ["050", "051", "052", "053", "054", "055", "056"]
 cpl = ["057", "058", "059", "060", "061", "062", "063"]
 
 
-config_ids = "cpl"
+config_ids = "ctl"
 
-for cid in config_ids:
-    file = f"config/config_{cid}.yaml"
-    synth = analysis.SyntheticModel(file, verbose=False)
-    synth.variance_global_sensitivity(nsample=512)
+# for cid in eval(config_ids):
+#     file = f"config/config_{cid}.yaml"
+#     synth = analysis.SyntheticModel(file, verbose=False)
+#     synth.variance_global_sensitivity(nsample=512)
 
+if "cpl" in config_ids:
+    cmap = "pink"
+else:
+    cmap = "bone"
 tsort, labels = get_tables_sorted(eval(config_ids))
-plot_tables_sorted(tsort, labels, model=config_ids, show=False, save=True)
+plot_tables_sorted(tsort, labels, model=config_ids, show=False, save=True, cmap=cmap)

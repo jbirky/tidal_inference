@@ -97,7 +97,10 @@ class SyntheticModel(vpi.AnalyzeVplanetModel):
             theta_run[key] = theta_var[key]
 
         if self.fix_tide == True:
-            theta_run['secondary.dTidalTau'] = theta_run['primary.dTidalTau']
+            if self.tide_model == "ctl":
+                theta_run['secondary.dTidalTau'] = theta_run['primary.dTidalTau']
+            elif self.tide_model == "cpl":
+                theta_run['secondary.dTidalQ'] = theta_run['primary.dTidalQ']
 
         if self.fix_radius == True:
             theta_run['primary.dRadius'] = theta_run['primary.dMass']
