@@ -10,7 +10,7 @@ import analysis
 # Parse user commands
 parser = argparse.ArgumentParser()
 parser.add_argument("--file", type=str, required=True)
-parser.add_argument("--operation", type=str, required=True)
+parser.add_argument("--op", type=str, required=True)
 parser.add_argument("--method", type=str, default="dynesty")
 
 # sensitivity options
@@ -30,8 +30,8 @@ os.nice(args.nice)
 # Parse config.yaml file
 synth = analysis.SyntheticModel(args.file, verbose=False, ncore=args.ncore)
 
-if args.operation.lower()[0:4] == "sens":
+if args.op.lower()[0:4] == "sens":
     synth.variance_global_sensitivity(nsample=args.nsample)
 
-elif args.operation.lower() == "mcmc":
+elif args.op.lower() == "mcmc":
     synth.run_mcmc(method=args.method, reload=args.reload, niter=args.niter)
