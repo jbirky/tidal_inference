@@ -79,10 +79,24 @@
 % ============================================================================
 \section{Introduction} \label{sec:intro}
 
+We aim to place theoretical limits on the constraints we can get on \tq\ and \ttau\ using tidal equillibrium models, and disentangle different sources of uncertainty: 
+\begin{itemize}
+    \item \textbf{Observational:} To what degree is the limitation on the uncertainty of \tq\ and \ttau\ due to a limitation of observational (e.g. ability to observe a parameter, data precision, sample size), which might be improved by better data? That is, how does the accuracy and precision of our observations affect the derived uncertainty of \tq\ and \ttau\, and which observational constraints matter most when it comes to inferring \tq\ and \ttau? What types of systems are most promising for constraining \tq\ and \ttau? Limitation of sample size or limitation of constraints? How do constraints from synchronization (rotation period + eccentricity + orbital period) compare to constraints from circularization (eccentricity + orbital period)? Smaller sample/more constraints vs. larger sample/less constraints
 
+    \item \textbf{Model:} To what degree to inherent degeneracies/pathologies in the model formulation contribute to uncertainty? Is this a problem that is \emph{well posed} for (Bayesian) inference--are the observables sensitive enough to your parameters of interest?
+
+    \item \textbf{Hypothesis:} To what degree does our hypothesis fail to reproduce reality? (comparison between simulated data uncertainties and real data uncertainties; model comparison between CTL, CPL). Can theoretical limits to the uncertainties on \tq\ and \ttau\ derived on \emph{simulated data} give us context to intepret uncertainties on \emph{real data}? Given enough free parameters, it can become possible for a model to reproduce any range of outcomes. How in this situation, can a model be invalidated?
+\end{itemize}
 
 % ============================================================================
 \section{Methods} \label{sec:methods}
+
+% ----------------------------------------------------------------------------
+\subsection{Global Sensitivity Analysis}
+
+
+% ----------------------------------------------------------------------------
+\subsection{Markov Chain Monte Carlo}
 
 % Assumptions for all model experiments:
 % \begin{itemize}
@@ -93,7 +107,7 @@
 
 \subsection{Observational Constraints}
 
-\textbf{Model input parameters and prior constraints:} 
+\textbf{Model initial conditions and observational constraints:} 
 \begin{table}[H]
 \begin{center}
 \begin{tabular}{r|c|c|c|c}
@@ -120,7 +134,7 @@
 \end{center}
 \end{table}
 
-\textbf{Model output parameters and likelihood constraints:} 
+\textbf{Model final conditions and observational constraints:} 
 \begin{table}[H]
 \begin{center}
 \begin{tabular}{r|c|c|c|c}
@@ -148,6 +162,24 @@
 % ============================================================================
 \section{Results} \label{sec:results}
 
+\begin{itemize}
+	\item sensitivity analysis (full 9 parameters + age) - CTL, CPL, CTL + STELLAR, CPL + STELLAR
+		\subitem free parameters: \mpri, \msec, \ob{1,i}, \ob{2,i}, \prot{1,i}, \prot{2,i}, \ecc{i}, \porb{,i}, \tq\
+		\subitem computation time: $\sim$30 min eqtide only, $\sim$1 day for eqtide + stellar
+	\item sensitivity analysis (6 parameters + age) - CTL, CPL, CTL + STELLAR, CPL + STELLAR
+		\subitem free parameters: \mpri, \msec, \prot{1,i}, \prot{2,i}, \ecc{i}, \tq\ (without obliquity, prior for porb based on final porb, ecc)
+		\subitem computation time: $\sim$30 min eqtide only, $\sim$1 day for eqtide + stellar
+	\item MCMC recovery test on synthetic data (4 parameters + age)
+		\subitem free parameters: \prot{1,i}, \prot{2,i}, \ecc{i}, \tq\ (fix masses, without obliquity, prior for porb based on final porb, ecc)
+		\subitem computation time (per MCMC run): $\sim$ few hours for eqtide only, $\sim$ few weeks for eqtide + stellar
+	\item 1D likelihood tests
+		\subitem free parameters: \tq\
+		% \subitem have tried running mcmc sampling on 1D likelihood functions, but dynesty is unable to sample--returns error that likelihood is too flat
+	\item MCMC recovery test on real data (4 parameters + age)?
+		\subitem if there's an open cluster system in a tide-sensitive age range
+		\subitem comparison with the synthetic data tests may be able to tell us how much posterior uncertainty is due to which input parameters/observational uncertainties/degeneracies?
+\end{itemize}
+
 \begin{figure}[ht!]
 \begin{center}
 	\caption{EQTIDE + STELLAR: CPL model}
@@ -158,12 +190,23 @@
 \end{figure}
 
 
+% \begin{figure}[ht!]
+% \begin{center}
+% 	\includegraphics[width=.49\linewidth]{../figures/sensitivity_final_primary_RotPer.png} 
+% 	\includegraphics[width=.49\linewidth]{../figures/sensitivity_final_secondary_RotPer.png}  \\
+% 	\includegraphics[width=.49\linewidth]{../figures/sensitivity_final_secondary_OrbPeriod.png} 
+% 	\includegraphics[width=.49\linewidth]{../figures/sensitivity_final_secondary_Eccentricity.png} 
+% \end{center}
+% \end{figure}
+
 \begin{figure}[ht!]
 \begin{center}
-	\includegraphics[width=.49\linewidth]{../figures/sensitivity_final_primary_RotPer.png} 
-	\includegraphics[width=.49\linewidth]{../figures/sensitivity_final_secondary_RotPer.png}  \\
-	\includegraphics[width=.49\linewidth]{../figures/sensitivity_final_secondary_OrbPeriod.png} 
-	\includegraphics[width=.49\linewidth]{../figures/sensitivity_final_secondary_Eccentricity.png} 
+	\includegraphics[width=.49\linewidth]{../figures/sensitivity_cpl_final_secondary_OrbPeriod.png} 
+	\includegraphics[width=.49\linewidth]{../figures/sensitivity_ctl_final_secondary_OrbPeriod.png} \\
+	\includegraphics[width=.49\linewidth]{../figures/sensitivity_cpl_final_primary_RotPer.png} 
+	\includegraphics[width=.49\linewidth]{../figures/sensitivity_ctl_final_primary_RotPer.png} \\
+	\includegraphics[width=.49\linewidth]{../figures/sensitivity_cpl_final_secondary_Eccentricity.png} 
+	\includegraphics[width=.49\linewidth]{../figures/sensitivity_ctl_final_secondary_Eccentricity.png} 
 \end{center}
 \end{figure}
 
@@ -174,8 +217,6 @@
 
 % ============================================================================
 \section{Conclusion} \label{sec:conclusion}
-
-
 
 
 \hfill \break % ============================================================================
