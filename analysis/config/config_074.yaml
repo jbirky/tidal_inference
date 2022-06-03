@@ -1,14 +1,14 @@
 module: "eqtide"
-tide_model: "ctl"
+tide_model: "cpl"
 input_fix:
   "vpl.dStopTime":
     units: "u.Myr"
-    true_value: 10
+    true_value: 500
     label: r"age [Myr]"
-  "secondary.dTidalTau":
-    units: "u.dex(u.s)"
-    true_value: -1.0
-    label: r"$\rm \log\tau_2$ [dex(s)]"
+  "secondary.dTidalQ":
+    units: "u.dex(u.dimensionless_unscaled)"
+    true_value: 6.0
+    label: r"$\rm \log\mathcal{Q}_2$"
   "primary.dRadius":
     units: "u.Rsun"
     true_value: 1.0
@@ -52,12 +52,12 @@ input_var:
     bounds: (0.0, 0.5)
     data: (None, None)
     label: r"$e_i$"
-  "primary.dTidalTau":
-    units: "u.dex(u.s)"
-    true_value: -1.0
-    bounds: (-4.0, 1.0)
+  "primary.dTidalQ":
+    units: "u.dex(u.dimensionless_unscaled)"
+    true_value: 6.0
+    bounds: (4.0, 12.0)
     data: (None, None)
-    label: r"$\rm \log\tau$ [dex(s)]"
+    label: r"$\rm \log\mathcal{Q}$"
 output:
   "final.primary.RotPer":
     units: "u.day"

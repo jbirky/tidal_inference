@@ -3,7 +3,7 @@ tide_model: "ctl"
 input_fix:
   "vpl.dStopTime":
     units: "u.Myr"
-    true_value: 10
+    true_value: 10000
     label: r"age [Myr]"
   "secondary.dTidalTau":
     units: "u.dex(u.s)"
