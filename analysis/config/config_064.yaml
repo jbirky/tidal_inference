@@ -3,7 +3,7 @@ tide_model: "ctl"
 input_fix:
   "vpl.dStopTime":
     units: "u.Myr"
-    true_value: 1000
+    true_value: 10
     label: r"age [Myr]"
   "secondary.dTidalTau":
     units: "u.dex(u.s)"
@@ -17,6 +17,10 @@ input_fix:
     units: "u.Rsun"
     true_value: 1.0
     label: r"$\rm R_2 \,[R_{\odot}]$"
+  "secondary.dOrbPeriod":
+    units: "u.day"
+    true_value: 7.0
+    label: r"$\rm P_{orb,i}$ [d]"
 input_var:
   "primary.dMass":
     units: "u.Msun"
@@ -30,18 +34,6 @@ input_var:
     bounds: (0.1, 1.1)
     data: (None, None)
     label: r"$\rm M_2 \,[M_{\odot}]$"
-  "primary.dObliquity":
-    units: "u.deg"
-    true_value: 0
-    bounds: (0, 30)
-    data: (None, None)
-    label: r"\rm $\varepsilon_{1,i}$ [deg]"
-  "secondary.dObliquity":
-    units: "u.deg"
-    true_value: 0
-    bounds: (0, 30)
-    data: (None, None)
-    label: r"\rm $\varepsilon_{2,i}$ [deg]"
   "primary.dRotPeriod":
     units: "u.day"
     true_value: 0.5
@@ -60,18 +52,12 @@ input_var:
     bounds: (0.0, 0.5)
     data: (None, None)
     label: r"$e_i$"
-  "secondary.dOrbPeriod":
-    units: "u.day"
-    true_value: 7.0
-    bounds: (1.0, 12.0)
-    data: (None, None)
-    label: r"$\rm P_{orb,i}$ [d]"
   "primary.dTidalTau":
     units: "u.dex(u.s)"
     true_value: -1.0
     bounds: (-4.0, 1.0)
     data: (None, None)
-    label: r"$\rm \log\tau$ [dex(s)]"
+    label: r"$\rm \log\tau_1$ [dex(s)]"
 output:
   "final.primary.RotPer":
     units: "u.day"
@@ -89,3 +75,15 @@ output:
     units: "u.dimensionless_unscaled"
     label: r"$e_f$"
     uncertainty: 0.1
+  "final.primary.RotAngMom":
+    units: "u.kg * u.m**2 / u.s"
+    label: r"$\rm J_{rot1,f}$"
+    uncertainty: None
+  "final.secondary.RotAngMom":
+    units: "u.kg * u.m**2 / u.s"
+    label: r"$\rm J_{rot2,f}$"
+    uncertainty: None
+  "final.secondary.OrbAngMom":
+    units: "u.kg * u.m**2 / u.s"
+    label: r"$\rm J_{orb,f}$"
+    uncertainty: None

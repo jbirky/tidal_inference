@@ -71,7 +71,7 @@ input_var:
     true_value: -1.0
     bounds: (-4.0, 1.0)
     data: (None, None)
-    label: r"$\rm \log\tau_1$ [dex(s)]"
+    label: r"$\rm \log\tau$ [dex(s)]"
 output:
   "final.primary.RotPer":
     units: "u.day"

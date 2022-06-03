@@ -42,6 +42,12 @@ input_var:
     bounds: (0, 30)
     data: (None, None)
     label: r"\rm $\varepsilon_{2,i}$ [deg]"
+  "primary.dRotPeriod":
+    units: "u.day"
+    true_value: 0.5
+    bounds: (0.1, 10.0)
+    data: (None, None)
+    label: r"$\rm P_{rot1,i}$ [d]"
   "secondary.dRotPeriod":
     units: "u.day"
     true_value: 0.5

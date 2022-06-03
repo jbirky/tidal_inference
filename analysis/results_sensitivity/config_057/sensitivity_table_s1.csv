@@ -1,9 +1,10 @@
 ,final.primary.RotPer,final.secondary.RotPer,final.secondary.OrbPeriod,final.secondary.Eccentricity
-primary.dMass,0.0,0.01,0.0,0.0
-secondary.dMass,0.03,0.0,0.0,0.01
+primary.dMass,0.01,0.0,0.0,0.01
+secondary.dMass,0.0,0.0,0.0,0.0
 primary.dObliquity,0.0,0.0,0.0,0.0
 secondary.dObliquity,0.0,0.0,0.0,0.0
-secondary.dRotPeriod,0.0,0.63,0.0,0.0
-secondary.dEcc,0.01,0.0,0.0,0.85
-secondary.dOrbPeriod,0.01,0.05,0.99,0.05
-primary.dTidalQ,0.3,0.01,0.0,0.04
+primary.dRotPeriod,0.63,0.0,0.0,0.0
+secondary.dRotPeriod,0.0,0.61,0.0,0.0
+secondary.dEcc,0.02,0.0,0.0,0.78
+secondary.dOrbPeriod,0.09,0.06,0.99,0.02
+primary.dTidalQ,0.01,0.01,0.0,0.0
