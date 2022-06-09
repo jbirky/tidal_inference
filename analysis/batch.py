@@ -17,12 +17,9 @@ cpl_stellar_reduced = ["099", "100", "101", "102", "103", "104", "105"]
 config_ids = "ctl_stellar"
 
 for cid in eval(config_ids):
-    file = f"config/config_{cid}.yaml"
-    synth = analysis.SyntheticModel(file, verbose=False)
-    synth.variance_global_sensitivity(nsample=512)
-
-# cmap = "pink" if "cpl" in config_ids else "bone"
-# tsort, inlabels, outlabels = get_tables_sorted(eval(config_ids))
-# inlabels = [re.sub("[\(\[].*?[\)\]]", "", lbl) for lbl in inlabels]
-# outlabels = [re.sub("[\(\[].*?[\)\]]", "", lbl) for lbl in outlabels]
-# plot_tables_sorted(tsort, inlabels, outlabels, model=config_ids, show=False, save=True, cmap=cmap)
+    if not os.path.exists(f"results_sensitivity/config_{cid}/var_global_sensitivity_sample.npz"):
+        file = f"config/config_{cid}.yaml"
+        synth = analysis.SyntheticModel(file, verbose=False, ncore=20)
+        synth.variance_global_sensitivity(nsample=512)
+    else:
+        print(f"config {cid} already completed.")
