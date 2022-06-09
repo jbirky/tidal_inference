@@ -61,7 +61,8 @@ class SyntheticModel(vpi.AnalyzeVplanetModel):
         else:
             self.fix_radius = False
 
-        print(f"fix_tide: {self.fix_tide}, fix_porb: {self.fix_porb}, fix_radius: {self.fix_radius}")
+        if verbose == True:
+            print(f"fix_tide: {self.fix_tide}, fix_porb: {self.fix_porb}, fix_radius: {self.fix_radius}")
 
 
     def compute_porb(self, theta_run):
