@@ -1,7 +1,7 @@
 import os
 import sys
 sys.path.append(os.path.realpath("../src"))
-import analysis
+import tidal
 
 os.nice(10)
 
@@ -15,11 +15,15 @@ ctl_stellar_reduced = ["092", "093", "094", "095", "096", "097", "098"]
 cpl_stellar_reduced = ["099", "100", "101", "102", "103", "104", "105"]
 
 config_ids = "ctl_stellar"
+EXECUTABLE = "/home/jbirky/Dropbox/packages/vplanet-private/bin/vplanet"
+overwrite = input(f"Allow overwrite? (y/n)")
 
 for cid in eval(config_ids):
-    if not os.path.exists(f"results_sensitivity/config_{cid}/var_global_sensitivity_sample.npz"):
+    print("config", cid)
+    results_exist = os.path.exists(f"results_sensitivity_hires/config_{cid}/var_global_sensitivity_sample.npz")
+    if (results_exist == False) or (overwrite.lower() == "y"):
         file = f"config/config_{cid}.yaml"
-        synth = analysis.SyntheticModel(file, verbose=False, ncore=20)
-        synth.variance_global_sensitivity(nsample=512)
+        synth = tidal.SyntheticModel(file, verbose=False, ncore=22, vpm_kwargs={"executable": EXECUTABLE})
+        synth.variance_global_sensitivity(nsample=2048, save=True)
     else:
         print(f"config {cid} already completed.")
