@@ -29,6 +29,8 @@ parser.add_argument("--nsample", type=int, default=1024)
 # alabi options
 parser.add_argument("--reload", type=bool, default=False)
 parser.add_argument("--niter", type=int, default=500)
+parser.add_argument("--ntrain", type=int, default=1000)
+parser.add_argument("--ntest", type=int, default=100)
 
 # multiprocessing options
 parser.add_argument("--ncore", type=int, default=mp.cpu_count())
@@ -47,10 +49,11 @@ vpm_kwargs = {"executable": EXECUTABLE}
 vpm_kwargs["timesteps"] = args.timesteps
 vpm_kwargs["time_init"] = args.time_init
 
-synth = tidal.SyntheticModel(args.file, verbose=False, ncore=args.ncore, vpm_kwargs=vpm_kwargs)
+synth = tidal.SyntheticModel(args.file, verbose=False, ncore=args.ncore, compute_true=True, vpm_kwargs=vpm_kwargs)
 
 if args.op.lower()[0:4] == "sens":
     synth.variance_global_sensitivity(nsample=args.nsample, save=True)
 
 elif args.op.lower() == "mcmc":
-    synth.run_mcmc(method=args.method, reload=args.reload, niter=args.niter)
+    synth.run_mcmc(method=args.method, reload=args.reload, niter=args.niter,
+                   ntrain=args.ntrain, ntest=args.ntest)
