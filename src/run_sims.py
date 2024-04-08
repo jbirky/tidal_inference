@@ -1,17 +1,16 @@
 import vplanet_inference as vpi
 import numpy as np
-import scipy
 import os
 import time
 from functools import partial
 import multiprocessing as mp
 import astropy.units as u
 import matplotlib.pyplot as plt
-import matplotlib.colors as colors
+import matplotlib.ticker as plticker
 from matplotlib import rc
 rc('text', usetex=True)
-rc('xtick', labelsize=16)
-rc('ytick', labelsize=16)
+rc('xtick', labelsize=36)
+rc('ytick', labelsize=36)
 
 __all__ = ["run_likelihood_tide",
            "plot_likelihood_1param"]
@@ -146,13 +145,14 @@ def plot_likelihood_1param(true_tides=None,
                            tide_model="ctl",
                            respath="results",
                            plotpath="plots",
+                           title=None,
                            colors=["b", "orange", "g", "r", "m", "c"]):
 
     tide_model = tide_model.lower()
     if tide_model == "ctl":
-        tide_label = r"$\tau$"
+        tide_label = r"$\log\tau$"
     elif tide_model == "cpl":
-        tide_label = r"$Q$"
+        tide_label = r"$\log\mathcal{Q}$"
     else:
         raise Exception(f"{tide_model} is not a valid EQTIDE model." + 
                         f"Choose either tide_model='ctl' or Choose either tide_model='cpl'.")
@@ -162,27 +162,32 @@ def plot_likelihood_1param(true_tides=None,
 
     for age_true in true_ages:
 
-        plt.figure(figsize=[12,10])
-        yarr = []
+        plt.figure(figsize=[14,12])
+        ax = plt.gca()
 
         results = ["tide_"+str(tv).replace("-", "n") for tv in true_tides]
 
         for ii, res in enumerate(results):
             theta, y = load_sims(f"{respath}/1param_{tide_model}_{age_true}_myr/{res}/tide_likelihood_sample.npz")
-            yarr.append(np.log10(-y))
+            # yarr.append(np.log10(-y))
 
             pl_label = tide_label + r"$=%s$"%(true_tides[ii])
-            plt.plot(theta, np.log10(-y), linewidth=1.2, color=colors[ii], label=pl_label)
-            plt.axvline(x=true_tides[ii], linestyle='--', color='k', linewidth=1)
+            plt.plot(theta, np.log10(-y), linewidth=2, color=colors[ii], label=pl_label)
+            plt.axvline(x=true_tides[ii], linestyle='--', color='k', linewidth=1, alpha=0.6)
 
-        plt.xlabel(tide_label, fontsize=22)
-        plt.ylabel(r"$\log(-\log\mathcal{L})$", fontsize=22)
-        plt.legend(loc='best', fontsize=18)
+        if title is None:
+            plt.title(f"{tide_model.upper()} ({age_true} Myr)", fontsize=55)
+        else:
+            plt.title(f"{title} ({age_true} Myr)", fontsize=55)
+        plt.xlabel(tide_label, fontsize=45)
+        plt.ylabel(r"$\log(-\log\mathcal{L})$", fontsize=45)
+        plt.legend(loc='best', fontsize=30)
         plt.xlim(min(theta), max(theta))
-        yf = np.array(yarr).flatten()
-        plt.ylim(np.nanmax(yf[np.isfinite(yf)])+1, np.nanmin(yf[np.isfinite(yf)])-1)
+        ax.invert_yaxis()
+        loc = plticker.MultipleLocator(base=1.0) # this locator puts ticks at regular intervals
+        ax.xaxis.set_major_locator(loc)
         plt.minorticks_on()
-        plt.savefig(f"{plotpath}/vary_tide_likelihood_{age_true}_myr.png")
+        plt.savefig(f"{plotpath}/vary_tide_likelihood_{age_true}_myr.png", bbox_inches="tight")
         plt.close()
 
 
