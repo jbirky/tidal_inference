@@ -27,13 +27,13 @@ input_var:
     true_value: 0
     bounds: (0, 30)
     data: (None, None)
-    label: r"\rm $\varepsilon_{1,i}$ [deg]"
+    label: r"\rm $\psi_{1,i}$ [deg]"
   "secondary.dObliquity":
     units: "u.deg"
     true_value: 0
     bounds: (0, 30)
     data: (None, None)
-    label: r"\rm $\varepsilon_{2,i}$ [deg]"
+    label: r"\rm $\psi_{2,i}$ [deg]"
   "primary.dRotPeriod":
     units: "u.day"
     true_value: 0.5
