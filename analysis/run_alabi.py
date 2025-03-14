@@ -9,8 +9,8 @@ from alabi.cache_utils import load_model_cache
 from alabi import utility as ut
 
 
-config = 131
-ncore = 5
+config = 125
+ncore = 48
 
 # EXECUTABLE = "/home/jbirky/Dropbox/packages/vplanet-private/bin/vplanet"
 EXECUTABLE = "vplanet"
@@ -30,51 +30,29 @@ sm = alabi.SurrogateModel(fn=synth.lnlike,
                           savedir=os.path.join(synth.outpath, "results_alabi/", synth.config_id), 
                           labels=synth.inparams_var.labels,
                           verbose=True,
-                          cache=True,
-                          scale="nlog")
+                          cache=True)
+
+# =============================================
+# Run dynesty 
+
+sm.run_dynesty(like_fn="true", ptform=synth.ptform, mode="dynamic", multi_proc=True, save_iter=100)
+sm.plot(plots=["dynesty_all"])
+
+# =============================================
+# Run alabi
 
 sm.init_samples(ntrain=1500, ntest=100, reload=False)
 sm.init_gp(kernel="ExpSquaredKernel", fit_amp=False, fit_mean=True, white_noise=-15)
 
 # sm = load_model_cache(f"results_alabi/config_{config}/")
-sm.active_train(niter=1500, algorithm="bape", gp_opt_freq=10, save_progress=True)
-sm.plot(plots=["gp_all"])
+# sm.active_train(niter=1000, algorithm="bape", gp_opt_freq=10, save_progress=True)
 
-sm = load_model_cache(f"results_alabi/config_{config}/")
-
-prior_data = np.full((len(synth.inparams_var.bounds), 2), None)
-
-# Prior - emcee format
-lnprior = partial(ut.lnprior_uniform, bounds=synth.inparams_var.bounds)
-
-# Prior - dynesty format
-prior_transform = partial(ut.prior_transform_uniform, bounds=synth.inparams_var.bounds)
-
-# sm.run_emcee(lnprior=lnprior, nwalkers=50, nsteps=5e4, opt_init=False)
-# sm.plot(plots=["emcee_corner"])
-
+# alabi + dynesty
 # sm.run_dynesty(ptform=prior_transform, mode='dynamic')
 # sm.plot(plots=["dynesty_all"])
 
-
 # =============================================
-# Run dynesty
+# Run emcee
 
-# synth.run_mcmc(method="dynesty")
-
-# =============================================
-## Run alabi
-
-# synth.run_mcmc(method="alabi", 
-#                reload_sm=False, 
-#                reload_samp=True,
-#                kernel="ExpSquaredKernel",
-#                ntrain=1000, 
-#                ntest=1, 
-#                niter=1000)
-
-# sims = np.load("results_alabi/config_125/initial_training_sample.npz")
-
-# sm = load_model_cache(f"results_alabi/config_{config}/")
-# sm.active_train(niter=1000, algorithm="bape", gp_opt_freq=10, save_progress=True)
-# sm.plot(plots=["gp_train_corner"])
+# sm.run_emcee(lnprior=lnprior, nwalkers=50, nsteps=5e4, opt_init=False)
+# sm.plot(plots=["emcee_corner"])
