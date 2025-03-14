@@ -21,7 +21,7 @@ EXECUTABLE = "/home/jbirky/Dropbox/packages/vplanet-private/bin/vplanet"
 parser = argparse.ArgumentParser()
 parser.add_argument("--file", type=str, required=True)
 parser.add_argument("--op", type=str, required=True)
-parser.add_argument("--method", type=str, default="dynesty")
+parser.add_argument("--method", type=str, default="alabi")
 
 # sensitivity options
 parser.add_argument("--nsample", type=int, default=1024)
