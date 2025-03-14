@@ -1,24 +1,24 @@
 ### Reproduce Figures:
 
-Figure 1 - 2: `evol_sim.ipynb`
+Figure 1 - 2: [`evol_sim.ipynb`](https://github.com/jbirky/tidal_inference/blob/main/notebooks/evol_sim.ipynb)
 
-Figure 3 - 4: `conservation_figures.ipynb`
+Figure 3 - 4: [`conservation_figures.ipynb`](https://github.com/jbirky/tidal_inference/blob/main/notebooks/conservation_figures.ipynb)
 
-Figure 5 - 6: `model_sensitivity.ipynb`
+Figure 5 - 6: [`model_sensitivity.ipynb`](https://github.com/jbirky/tidal_inference/blob/main/notebooks/model_sensitivity.ipynb)
 
-Figure 6 - 7: `likelihood_sensitivity.ipynb`
+Figure 6 - 7: [`likelihood_sensitivity.ipynb`](https://github.com/jbirky/tidal_inference/blob/main/notebooks/likelihood_sensitivity.ipynb)
 
-Figure 8 - 11: `alabi_corner_plots.ipynb`
+Figure 8 - 11: [`alabi_corner_plots.ipynb`](https://github.com/jbirky/tidal_inference/blob/main/notebooks/alabi_corner_plots.ipynb)
 
-Figure 12 - 13: `alabi_corner_zoom.ipynb`
+Figure 12 - 13: [`alabi_corner_zoom.ipynb`](https://github.com/jbirky/tidal_inference/blob/main/notebooks/alabi_corner_zoom.ipynb)
 
-Figure 14- 16: `plot_1d_likelihood.ipynb`
+Figure 14- 16: [`plot_1d_likelihood.ipynb`](https://github.com/jbirky/tidal_inference/blob/main/notebooks/plot_1d_likelihood.ipynb)
 
-Figure 17: `degeneracy_evolutions_ctl.ipynb`
+Figure 17: [`degeneracy_evolutions_ctl.ipynb`](https://github.com/jbirky/tidal_inference/blob/main/notebooks/degeneracy_evolutions_ctl.ipynb)
 
-Figure 18: `degeneracy_evolutions_cpl.ipynb`
+Figure 18: [`degeneracy_evolutions_cpl.ipynb`](https://github.com/jbirky/tidal_inference/blob/main/notebooks/degeneracy_evolutions_cpl.ipynb)
 
-Figure 19: `plane3d.ipynb`
+Figure 19: [`plane3d.ipynb`](https://github.com/jbirky/tidal_inference/blob/main/notebooks/plane3d.ipynb)
 
 ### Results
 
