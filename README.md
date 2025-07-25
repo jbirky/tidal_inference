@@ -1,4 +1,17 @@
-### Reproduce Figures:
+## Prospects of Constraining Equilibrium Tides in Low-Mass Binary Stars
+
+Authors: Jessica Birky, Rory Barnes, James Davenport
+
+Link to paper: [http://arxiv.org/abs/2507.12639](
+http://arxiv.org/abs/2507.12639)
+
+### Main code dependencies:
+
+- [vplanet](https://github.com/VirtualPlanetaryLaboratory/vplanet)
+- [vplanet_inference](https://github.com/jbirky/vplanet_inference)
+- [alabi](https://github.com/jbirky/alabi)
+
+### Code to reproduce figures:
 
 Figure 1 - 2: [`evol_sim.ipynb`](https://github.com/jbirky/tidal_inference/blob/main/notebooks/evol_sim.ipynb)
 
@@ -26,7 +39,7 @@ Figure 24: [`evol_sim_ratio_ctl.ipynb`](https://github.com/jbirky/tidal_inferenc
 
 Figure 25: [`evol_sim_ratio_ctl.ipynb`](https://github.com/jbirky/tidal_inference/blob/main/notebooks/evol_sim_ratio_ctl_stellar.ipynb)
 
-### Results
+### Configuration files for the published results:
 
 Sensitivity analysis
 | age (Myr) | ctl_stellar | cpl_stellar |
